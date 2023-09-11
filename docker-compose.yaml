@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: spimex_test_task_db
+    ports:
+      - "6541:5432"
+    environment:
+      - POSTGRES_DB=spimex_test_task
+      - POSTGRES_USER=spimex_test_task_user
+      - POSTGRES_PASSWORD=spimex_test_task_pass
+
+  server:
+    build: .
+    image: spimex_test_task_server
+    container_name: spimex_test_task_server
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING.DATASOURCE.URL=jdbc:postgresql://db:5432/spimex_test_task
